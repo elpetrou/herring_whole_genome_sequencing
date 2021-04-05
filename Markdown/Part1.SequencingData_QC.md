@@ -17,6 +17,8 @@ For each of these data backups, I used the MD5sum file to verify that the data w
 I plotted the distribution of raw sequencing reads for each herring sample [using this R script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/6131687bd581f88f8a08c3e23cd06f516001c82b/Scripts/plot_distro_raw_seqs.R).
 These data were provided to me by the NW Genomics Sequencing Center in .csv format. 
 
+Here is a plot of the data: 
+
 ## Unzip data
 
 I unzipped the data on Klone [using this script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/102c8f2fcdacae63b32a074be61be1d13fdb52a1/Scripts/gunzip.sh)
