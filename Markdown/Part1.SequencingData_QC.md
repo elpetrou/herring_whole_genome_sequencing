@@ -25,7 +25,9 @@ Here is a summary of the raw sequencing data :
   - Range = 0 to 80.06 million reads
   - Standard deviation = 4.41 million reads
   - Seven samples sequenced poorly (reads per sample less than 2 sd from the mean)
+  -     SMBY15_012  SMBY15_018  SQUA14_045   BERN16_004  BERN16_010  BERN16_032 BERN16_031
   - Nine samples sequenced very deeply (reads per sample more than 2 sd from mean)
+  -     CHPT16_041  ELBY15_118  ELBY15_129  ELBY15_177  QLBY19_080  QLBY19_097  BERN16_033  OLGA19_003  SITKA17_043
 
 ## Unzip data
 
