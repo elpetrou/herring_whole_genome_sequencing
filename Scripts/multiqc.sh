@@ -14,7 +14,7 @@ cd $DATADIR
 module load singularity
 MYSINGULARITY=/mmfs1/gscratch/merlab/singularity_sif/multiqc-srf_1.9.sif
 
-# Use the singularity exec command to use the singularity and run commands that are specific to the software it contains (VCFtools, in this case)
+# Use the singularity exec command to use the singularity and run commands that are specific to the software
 
 singularity exec \
 $MYSINGULARITY \
