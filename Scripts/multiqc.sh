@@ -20,11 +20,3 @@ singularity exec \
 $MYSINGULARITY \
 multiqc . 
 
-# Download the html report to local windows machine using windows powershell
-# open a Command Prompt window
-#type
-set PATH=C:\Program Files\putty;%PATH%
-
-#transfer files from klone to windows machine
-pscp -P 22 elpetrou@klone.hyak.uw.edu:/gscratch/scrubbed/elpetrou/fastqc/multiqc_report.html c:\users\elpet\downloads\multiqc_report.html
-
