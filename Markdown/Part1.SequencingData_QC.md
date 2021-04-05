@@ -17,7 +17,14 @@ For each of these data backups, I used the MD5sum file to verify that the data w
 I plotted the distribution of raw sequencing reads for each herring sample [using this R script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/6131687bd581f88f8a08c3e23cd06f516001c82b/Scripts/plot_distro_raw_seqs.R).
 These data were provided to me by the NW Genomics Sequencing Center in .csv format. 
 
-Here is a plot of the data: 
+![raw seq distro](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/11a515129c73adc8c18a78f0db3a0f224e851bee/Markdown/raw_seq_distro.jpeg) 
+
+Here is a summary of the raw sequencing data :
+  - Average number of reads per sample = 12.88 million reads
+  - Range = 0 to 80.06 million reads
+  - Standard deviation = 4.41 million reads
+  - Seven samples sequenced poorly (had less than 2 sd from the mean)
+  - Nine samples sequenced really deeply (more than 2 sd from mean)
 
 ## Unzip data
 
