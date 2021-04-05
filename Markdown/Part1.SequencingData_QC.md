@@ -20,11 +20,12 @@ These data were provided to me by the NW Genomics Sequencing Center in .csv form
 ![raw seq distro](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/11a515129c73adc8c18a78f0db3a0f224e851bee/Markdown/raw_seq_distro.jpeg) 
 
 Here is a summary of the raw sequencing data :
+  - We sequenced 556 herring (number of WA samples = 281; number of AK samples = 275)
   - Average number of reads per sample = 12.88 million reads
   - Range = 0 to 80.06 million reads
   - Standard deviation = 4.41 million reads
-  - Seven samples sequenced poorly (had less than 2 sd from the mean)
-  - Nine samples sequenced really deeply (more than 2 sd from mean)
+  - Seven samples sequenced poorly (reads per sample less than 2 sd from the mean)
+  - Nine samples sequenced very deeply (reads per sample more than 2 sd from mean)
 
 ## Unzip data
 
