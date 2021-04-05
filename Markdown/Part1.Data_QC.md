@@ -23,5 +23,5 @@ To check the quality of the raw sequence data I ran the software FastQC [using t
 
 ## Visualize FastQC output using MultiQC
 
-I visualized the voluminous FastQC output using MultiQC software on Klone. See [this script](Scripts/multiqc.sh)
+I visualized the voluminous FastQC output using MultiQC software on Klone. See [this script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/102c8f2fcdacae63b32a074be61be1d13fdb52a1/Scripts/multiqc.sh)
 
