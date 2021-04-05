@@ -1,0 +1,12 @@
+# Downloading data from a Linux Server to a Windows machine is kind of a pain. 
+# To do this, I downloaded Putty PSCP and saved the .exe file to a folder in C:\Program Files\putty
+# Downlaod website: https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html
+
+# In windows, I opened a Command Prompt window and designated the path to putty folder
+
+set PATH=C:\Program Files\putty;%PATH%
+
+# Next, I used the putty pscp command to transfer some files from Klone to my windows laptop:
+
+pscp -P 22 elpetrou@klone.hyak.uw.edu:/gscratch/scrubbed/elpetrou/fastqc/multiqc_report.html c:\users\elpet\downloads\multiqc_report.html
+
