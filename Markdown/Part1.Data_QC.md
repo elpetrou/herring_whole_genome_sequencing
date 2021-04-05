@@ -15,11 +15,11 @@ For each of these data backups, I used the MD5sum file to verify that the data w
 
 ## Unzip data
 
-I unzipped the data on Klone [using this script](Scripts/gunzip.sh)
+I unzipped the data on Klone [using this script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/102c8f2fcdacae63b32a074be61be1d13fdb52a1/Scripts/gunzip.sh)
 
 ## Run FastQC
 
-To check the quality of the raw sequence data I ran the software FastQC [using this script](Scripts/fastqc.sh) on Klone
+To check the quality of the raw sequence data I ran the software FastQC [using this script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/102c8f2fcdacae63b32a074be61be1d13fdb52a1/Scripts/fastqc.sh) on Klone
 
 ## Visualize FastQC output using MultiQC
 
