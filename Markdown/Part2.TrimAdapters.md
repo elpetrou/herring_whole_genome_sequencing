@@ -34,11 +34,11 @@ ILLUMINACLIP:<fastaWithAdaptersEtc>:<seed mismatches>:<palindrome clip threshold
 
 #### File with Nextera adapters, as specified in Physalia course and Illumina Adapter Sequences document:
 
-I made a [fasta file containing Illumina Nextera adapter sequences] https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/6156aca1bec94cb8261570e0636fa7d9a3c236f5/Scripts/NexteraPE_EP.fa). These are the sequences that I will trim away from my raw sequencing data using Trimmomatic. 
+I made a [fasta file containing Illumina Nextera adapter sequences](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/6156aca1bec94cb8261570e0636fa7d9a3c236f5/Scripts/NexteraPE_EP.fa). These are the sequences that I will trim away from my raw sequencing data using Trimmomatic. 
 
 ##### Script to run Trimmomatic over a directory of fastq files on Klone
  
-Next, I wrote a [script to run trimmomatic on an interactive compute node on Klone]. https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/6156aca1bec94cb8261570e0636fa7d9a3c236f5/Scripts/interactivenode_trimmomatic.sh
+Next, I wrote a [script to run trimmomatic on an interactive compute node on Klone](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/6156aca1bec94cb8261570e0636fa7d9a3c236f5/Scripts/interactivenode_trimmomatic.sh)
 
 I tested and debugged this script on 20210407, and it ran on one sample hooray!
 output printed to terminal:
