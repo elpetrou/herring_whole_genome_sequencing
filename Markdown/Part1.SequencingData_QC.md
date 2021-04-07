@@ -5,8 +5,8 @@
 
 Sequencing data were downloaded from the NW Genomics Center using Globus software. The raw data (.tar files) have been saved to three locations:
   1. An external hard drive in my office
-  2. The HauserLab fireproof external hard drive
-  3. The /gscratch/scrubbed/elpetrou directory on Klone
+  2. The HauserLab fireproof external hard drive: ioSafe_HauserLab/Herring_Eleni/Herring_WholeGenomeSequencing_WA_AK
+  3. Klone: /gscratch/scrubbed/elpetrou
 
 *NB: We should also back up the data on LOLO archive
 
