@@ -32,108 +32,17 @@ See user manual for explanation of terms
 ILLUMINACLIP:<fastaWithAdaptersEtc>:<seed mismatches>:<palindrome clip threshold>:<simple clip threshold>:<minAdapterLength>:<keepBothReads>
 ```
 
-#### File with Nextera adapters, as specified in Physalia course:
-Saved as "NexteraPE_NT.fa"
-```
->PrefixNX/1
-AGATGTGTATAAGAGACAG
->PrefixNX/2
-AGATGTGTATAAGAGACAG
->Trans1
-TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
->Trans1_rc
-CTGTCTCTTATACACATCTGACGCTGCCGACGA
->Trans2
-GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
->Trans2_rc
-CTGTCTCTTATACACATCTCCGAGCCCACGAGAC
->Prefix_PCR/1
-AATGATACGGCGACCACCGAGATCTACAC
->Prefix_PCR/2
-CAAGCAGAAGACGGCATACGAGAT
->PCR_i5
-AATGATACGGCGACCACCGAGATCTACAC
->PCR_i5_rc
-GTGTAGATCTCGGTGGTCGCCGTATCATT
->PCR_i7
-CAAGCAGAAGACGGCATACGAGAT
->PCR_i7_rc
-ATCTCGTATGCCGTCTTCTGCTTG
-```
+#### File with Nextera adapters, as specified in Physalia course and Illumina Adapter Sequences document:
 
-##### My code in progress (have not run yet)
+I made a [fasta file containing Illumina Nextera adapter sequences] https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/6156aca1bec94cb8261570e0636fa7d9a3c236f5/Scripts/NexteraPE_EP.fa). These are the sequences that I will trim away from my raw sequencing data using Trimmomatic. 
 
-``` bash
-# Use interactive node to check that singularity is working
-srun -p compute-hugemem -A merlab --nodes=1 \
---ntasks-per-node=1 --time=02:00:00 \
---mem=100G --pty /bin/bash
+##### Script to run Trimmomatic over a directory of fastq files on Klone
+ 
+Next, I wrote a [script to run trimmomatic on an interactive compute node on Klone]. https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/6156aca1bec94cb8261570e0636fa7d9a3c236f5/Scripts/interactivenode_trimmomatic.sh
 
+I tested and debugged this script on 20210407, and it ran on one sample hooray!
+output printed to terminal:
 
-# Specify the paths to input files and directories
-DATADIR=/mmfs1/gscratch/scrubbed/elpetrou/fastq/WA_herring
-SAMPLELIST=trimmomatic_list.txt
-SUFFIX1=_R1_001.fastq # Suffix to raw fastq files. The forward reads with paired-end data.
-SUFFIX2=_R2_001.fastq # Suffix to raw fastq files. The reverse reads with paired-end data. 
-ADAPTERFILE=NexteraPE_NT.fa # File with adapter sequences. This is the file that Nina provided in the physalia course. Should check
-OUTDIR=/mmfs1/gscratch/scrubbed/elpetrou/fastq_trimmed #where to store output files
+- Input Read Pairs: 6825779 Both Surviving: 5932557 (86.91%) Forward Only Surviving: 468865 (6.87%) Reverse Only Surviving: 215887 (3.16%) Dropped: 208470 (3.05%)
 
-
-##############################################################################
-
-# Load the singularity module
-module load singularity
-MYSINGULARITY=/mmfs1/gscratch/merlab/singularity_sif/BioinfoContainers_trimmomatic.sif 
-
-# Check software version
-singularity exec \
-$MYSINGULARITY \
-trimmomatic --version
-
-##############################################################################
-# Save the sample names of the forward reads into a text file (for looping thru samples later)
-mkdir $OUTDIR
-
-cd $DATADIR
-ls *$SUFFIX1 > $SAMPLELIST  
-
-##############################################################################
-# Run Trimmomatic. For an explanation of trimmomatic commands, see: 
-# http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf
-# https://datacarpentry.org/wrangling-genomics/03-trimming/index.html
-
-# Testing this piece of code
-for infile in `cat $SAMPLELIST` 
-do
-	base=$(basename --suffix=$SUFFIX1 $infile) # this cute piece of code gets the basename of the fastq files
-	echo $base \
-	echo ${base}$SUFFIX2 \
-	singularity exec \
-	$MYSINGULARITY \
-	trimmomatic PE \
-	-threads 1 -phred33 \
-	${infile} \
-	${base}$SUFFIX2 \
-	${base}_R1_001.trim.fastq \
-	${base}_R1_001.unpaired.trim.fastq \
-	${base}_R2_001.trim.fastq \
-	${base}_R2_001.unpaired.trim.fastq \
-	ILLUMINACLIP:$ADAPTERFILE:2:30:10:1:true \
-	MINLEN:40 
-done
-
-
-#############################################################################
-# Move the results files to the output directory
-
-# Test this to make sure it works (I think it will)
-mv *_R1_001.trim.fastq $OUTDIR
-mv *_R2_001.trim.fastq $OUTDIR
-mv *_R1_001.unpaired.trim.fastq $OUTDIR
-mv *_R2_001.unpaired.trim.fastq $OUTDIR
-
-
-
-
-
-```
+For one set of fastq samples (R1 & R2), I think it took about 5 min to finish running. So I think it will take about a day to finish trimming one lane of fastq files on Klone (I will ask for 48 hours of wall time in the sbatch script, just to be safe).
