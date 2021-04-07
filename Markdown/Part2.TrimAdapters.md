@@ -15,7 +15,7 @@ The different processing steps occur in the order in which the steps are specifi
 For paired-end data, two input files, and 4 output files are specified, 2 for the 'paired' output where both reads survived the processing, and 2 for corresponding 'unpaired' output where a read survived, but the partner read did not.
 
 #### Syntax: 
-See user manual for explanation of terms
+See [user manual](http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf) for explanation of terms
 ``` 
 PE [-version] [-threads <threads>] [-phred33|-phred64] [-trimlog <trimLogFile>] [-summary <statsSummaryFile>] [-quiet] [-validatePairs] #[-basein <inputBase> | <inputFile1> <inputFile2>] [-baseout <outputBase> | <outputFile1P> <outputFile1U> <outputFile2P> <outputFile2U>]
 ```
@@ -105,7 +105,7 @@ ls *$SUFFIX1 > $SAMPLELIST
 # Testing this piece of code
 for infile in `cat $SAMPLELIST` 
 do
-	base=$(basename --suffix=$SUFFIX1 $SAMPLE) # this cute piece of code gets the basename of the fastq files
+	base=$(basename --suffix=$SUFFIX1 $infile) # this cute piece of code gets the basename of the fastq files
 	echo $base \
 	echo ${base}$SUFFIX2 \
 	singularity exec \
