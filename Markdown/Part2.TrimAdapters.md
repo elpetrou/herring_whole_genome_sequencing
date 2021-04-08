@@ -38,12 +38,14 @@ I made a [fasta file containing Illumina Nextera adapter sequences](https://gith
 
 ### Script to run Trimmomatic over a directory of fastq files on Klone
  
-Next, I wrote a [script to run trimmomatic on an interactive compute node on Klone](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/6156aca1bec94cb8261570e0636fa7d9a3c236f5/Scripts/interactivenode_trimmomatic.sh)
+Next, I wrote a [sbatch script to run trimmomatic on Klone](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/c55e30b2e48406756914b73528f9acc48fd7aaef/Scripts/trimmomatic_sbatch.sh)
 
-This script removes Illumina adapters, trimes sequences if their phred score drops below 20 (SLIDINGWINDOW:4:20), and removes sequences that are shorter than 40 bp (MINLEN:40). 
+This script removes Illumina adapters, trims sequences if their phred score drops below 20 (SLIDINGWINDOW:4:20), and removes sequences that are shorter than 40 bp (MINLEN:40). 
 
 I tested and debugged this script on 20210407, and it ran on one sample hooray! Here is what was printed to the terminal:
 
 ``` Input Read Pairs: 6825779 Both Surviving: 5932557 (86.91%) Forward Only Surviving: 468865 (6.87%) Reverse Only Surviving: 215887 (3.16%) Dropped: 208470 (3.05%) ```
 
 For one set of fastq samples (R1 & R2), I think it took about 5 min to finish running. So I think it will take about a day to finish trimming one lane of fastq files on Klone (I will ask for 48 hours of wall time in the sbatch script, just to be safe).
+
+
