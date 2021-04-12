@@ -46,6 +46,8 @@ INDEX_PREFIX=GCF_900700415.1_Ch_v2.0.2
 bowtie2-build -f $GENOME $INDEX_PREFIX
 
 ```
+The files ending in ".bt2" are the indexed genome.
+
 
 ## Align sequences to reference genome with bowtie2
 
