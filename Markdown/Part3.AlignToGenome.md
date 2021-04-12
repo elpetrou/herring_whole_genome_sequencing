@@ -61,7 +61,7 @@ bowtie2 -x index_prefix \
 --very-sensitive \
 --minins 0 --maxins 1500 --fr \
 --threads 20 \
---rg-id $SAMPLE_UNIQ_ID --rg SM:$SAMPLE_ID --rg LB:$SAMPLE_ID --rg PU:$PU --rg PL:ILLUMINA 
+--rg-id $SAMPLE_ID --rg SM:$SAMPLE_ID --rg LB:$SAMPLE_ID --rg PU:Lane1 --rg PL:ILLUMINA 
     
 ```
 
