@@ -42,7 +42,7 @@ The command bowtie2 takes a Bowtie2 index and set of sequencing read files and o
 #SBATCH --account=merlab
 #SBATCH --partition=compute-hugemem
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=10
+#SBATCH --ntasks-per-node=20
 ## Walltime (days-hours:minutes:seconds format)
 #SBATCH --time=2-12:00:00
 ## Memory per node
@@ -60,8 +60,8 @@ bowtie2 -x index_prefix \
 -S bowtie2_alignments.sam \
 --very-sensitive \
 --minins 0 --maxins 1500 --fr \
---threads 10 \
- --rg-id $SAMPLE_UNIQ_ID --rg SM:$SAMPLE_ID --rg LB:$SAMPLE_ID --rg PU:$PU --rg PL:ILLUMINA 
+--threads 20 \
+--rg-id $SAMPLE_UNIQ_ID --rg SM:$SAMPLE_ID --rg LB:$SAMPLE_ID --rg PU:$PU --rg PL:ILLUMINA 
     
 ```
 
