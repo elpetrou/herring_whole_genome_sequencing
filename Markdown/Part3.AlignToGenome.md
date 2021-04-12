@@ -68,17 +68,41 @@ The command bowtie2 takes a Bowtie2 index and set of sequencing read files and o
 #SBATCH --mail-user=elpetrou@uw.edu
 
 ##### ENVIRONMENT SETUP ##########
-DATADIR=/mmfs1/gscratch/scrubbed/elpetrou/fastq_trimmed
+DATADIR=/mmfs1/gscratch/scrubbed/elpetrou/test
+GENOMEDIR=/gscratch/merlab/genomes/atlantic_herring #location of genome
+GENOME_PREFIX=GCF_900700415.1_Ch_v2.0.2 #prefix of .bt2 files made by bowtie2
+SUFFIX1=_R1_001.trim.fastq # Suffix to trimmed fastq files. The forward reads with paired-end data.
+SUFFIX2=_R2_001.trim.fastq # Suffix to trimmed fastq files. The reverse reads with paired-end data.
+SAMPLELIST=bowtie2_list.txt # text file storing sample names (for looping thru samples)
+OUTDIR=/mmfs1/gscratch/scrubbed/elpetrou/bam #where to store output files
 
-bowtie2 -x index_prefix \
---phred33 -q \
--1 input_reads_pair_1.fastq \
--2 input_reads_pair_2.fastq \
--S bowtie2_alignments.sam \
---very-sensitive \
---minins 0 --maxins 1500 --fr \
---threads 20 \
---rg-id $SAMPLE_ID --rg SM:$SAMPLE_ID --rg LB:$SAMPLE_ID --rg PU:Lane1 --rg PL:ILLUMINA 
+
+##############################################################################
+## Save the sample names of the forward reads into a text file (for looping thru samples later)
+mkdir $OUTDIR
+
+cd $DATADIR
+ls *$SUFFIX1 > $SAMPLELIST # save all fastq files with forward reads to a text file
+
+for infile in `cat $SAMPLELIST`
+do
+	base=`basename --suffix=$SUFFIX1 $infile`
+	bowtie2 -x $GENOMEDIR'/'$GENOME_PREFIX \
+	--phred33 -q \
+	-1 ${base}$SUFFIX1 \
+	-2 ${base}$SUFFIX2 \
+	-S ${base}.sam \
+	--very-sensitive \
+	--minins 0 --maxins 1500 --fr \
+	--threads 20 \
+	--rg-id ${base} --rg SM:${base} --rg LB:${base} --rg PU:Lane1 --rg PL:ILLUMINA
+done
+
+
+#############################################################################
+## Move the results files to the output directory
+
+mv *sam $OUTDIR
     
 ```
 
