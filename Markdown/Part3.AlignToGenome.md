@@ -2,7 +2,7 @@
 
 ## Download latest version of Atlantic herring genome from NCBI
 
-I navigated to the NCBI RefSeq website and found the annotated Atlantic herring genome: https://www.ncbi.nlm.nih.gov/datasets/genomes/?txid=7950
+I navigated to the NCBI RefSeq website and found the annotated Atlantic herring genome: https://www.ncbi.nlm.nih.gov/genome/15477?genome_assembly_id=495882
 - Assembly: Ch_v2.0.2
 - RefSeq: GCF_900700415.1
 
