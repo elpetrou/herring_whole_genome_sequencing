@@ -1,4 +1,6 @@
-# Align the sequences to Atlantic Herring genome using Bowtie 2
+# Align the sequences to Atlantic Herring genome using Bowtie2
+
+[Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#adding-to-path) is an ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences.
 
 ## Download latest version of Atlantic herring genome from NCBI
 
@@ -6,7 +8,9 @@ I navigated to the NCBI RefSeq website and found the annotated Atlantic herring 
 - Assembly: Ch_v2.0.2
 - RefSeq: GCF_900700415.1
 
-I downloaded all files (fasta, gff) and uploaded them to Klone here: ``` /gscratch/merlab/genomes/atlantic_herring ```
+I downloaded all files (fasta = GCF_900700415.1_Ch_v2.0.2_genomic.fna, gff = GCF_900700415.1_Ch_v2.0.2_genomic.gff) and uploaded them to Klone here: 
+
+``` /gscratch/merlab/genomes/atlantic_herring ```
 
  
 ## Install bowtie2 on Klone
@@ -18,10 +22,6 @@ cd /gscratch/merlab/software/miniconda3/bin
 conda install -c bioconda bowtie2
 ```
 
-## Some notes about Bowtie2
-
-[Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#adding-to-path) is an ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences.
-
 ### Index the reference genome with bowtie2
 The first and basic step of running Bowtie2 is to build Bowtie2 index from a reference genome sequence. The basic usage of the command bowtie2-build is:
 
@@ -31,10 +31,19 @@ bowtie2-build -f input_reference.fasta index_prefix
 ```
 input_reference.fasta is an input file of sequence reads in fasta format, and index_prefix is the prefix of the generated index files. The option -f that is used when the reference input file is a fasta file.
 
-Here is how I indexed the Atlantic herring genome:
+Here is how I indexed the genome:
 
-``` bash
+```
+srun -p compute-hugemem -A merlab --nodes=1 \
+--ntasks-per-node=1 --time=02:00:00 \
+--mem=40G --pty /bin/bash
 
+# Specify files
+GENOME=/gscratch/merlab/genomes/atlantic_herring/GCF_900700415.1_Ch_v2.0.2_genomic.fna
+INDEX_PREFIX=GCF_900700415.1_Ch_v2.0.2
+
+# Run bowtie2-build
+bowtie2-build -f $GENOME $INDEX_PREFIX
 
 ```
 
