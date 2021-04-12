@@ -1,7 +1,13 @@
 # Align the sequences to Atlantic Herring genome using Bowtie 2
 
 ## Download latest version of Atlantic herring genome from NCBI
- Notes here
+
+I navigated to the NCBI RefSeq website and found the annotated Atlantic herring genome: https://www.ncbi.nlm.nih.gov/datasets/genomes/?txid=7950
+- Assembly: Ch_v2.0.2
+- RefSeq: GCF_900700415.1
+
+I downloaded all files (fasta, gff) and uploaded them to Klone here: ``` /gscratch/merlab/genomes/atlantic_herring ```
+
  
 ## Install bowtie2 on Klone
 
