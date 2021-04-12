@@ -22,7 +22,7 @@ cd /gscratch/merlab/software/miniconda3/bin
 conda install -c bioconda bowtie2
 ```
 
-### Index the reference genome with bowtie2
+## Index the reference genome with bowtie2
 The first and basic step of running Bowtie2 is to build Bowtie2 index from a reference genome sequence. The basic usage of the command bowtie2-build is:
 
 ```
@@ -47,7 +47,7 @@ bowtie2-build -f $GENOME $INDEX_PREFIX
 
 ```
 
-### Align sequences to reference genome with bowtie2
+## Align sequences to reference genome with bowtie2
 
 The command bowtie2 takes a Bowtie2 index and set of sequencing read files and outputs set of alignments in SAM format. An example of how to run Bowtie2 local alignment with paired-end fastq files and 10 CPUs is shown below
 
