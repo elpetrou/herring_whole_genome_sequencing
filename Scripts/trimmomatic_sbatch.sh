@@ -5,7 +5,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=10
 ## Walltime (days-hours:minutes:seconds format)
-#SBATCH --time=2-12:00:00
+#SBATCH --time=18:00:00
 ## Memory per node
 #SBATCH --mem=80G
 #SBATCH --mail-type=ALL
@@ -50,9 +50,6 @@ do
         MINLEN:40
 done
 
-## Yaaay! This code is running!!
-## Here is an example of some output: Input Read Pairs: 6825779 Both Surviving: 5932557 (86.91%) Forward Only Surviving: 468865 (6.87%) Reverse Only Surviving: 215887 (3.16%) Dropped: 208470 (3.05%)
-## For one set of fastq samples, I think it took about 5 min. So it will take about a day to finish trimming one lane on Klone (give it two days as buffer)
 #############################################################################
 ## Move the results files to the output directory
 
