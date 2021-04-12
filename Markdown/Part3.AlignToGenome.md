@@ -46,14 +46,20 @@ The command bowtie2 takes a Bowtie2 index and set of sequencing read files and o
 ##### ENVIRONMENT SETUP ##########
 DATADIR=/mmfs1/gscratch/scrubbed/elpetrou/fastq_trimmed
 
-bowtie2 -x index_prefix -q \
+bowtie2 -x index_prefix \
+--phred33 -q \
 -1 input_reads_pair_1.fastq \
 -2 input_reads_pair_2.fastq \
 -S bowtie2_alignments.sam \
---sensitive \
--p $SLURM_NTASKS_PER_NODE
+--very-sensitive \
+--minins 0 --maxins 1500 --fr \
+--threads 10
 
 
+Extra parameters from Nina's class:
+
+ --rg-id $SAMPLE_UNIQ_ID --rg SM:$SAMPLE_ID --rg LB:$SAMPLE_ID --rg PU:$PU --rg PL:ILLUMINA 
+    
 
 ```
 
