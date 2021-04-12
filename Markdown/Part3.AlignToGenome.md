@@ -60,14 +60,9 @@ bowtie2 -x index_prefix \
 -S bowtie2_alignments.sam \
 --very-sensitive \
 --minins 0 --maxins 1500 --fr \
---threads 10
-
-
-Extra parameters from Nina's class:
-
+--threads 10 \
  --rg-id $SAMPLE_UNIQ_ID --rg SM:$SAMPLE_ID --rg LB:$SAMPLE_ID --rg PU:$PU --rg PL:ILLUMINA 
     
-
 ```
 
 
