@@ -51,52 +51,51 @@ The files ending in ".bt2" are the indexed genome.
 
 ## Align sequences to reference genome with bowtie2
 
-The command bowtie2 takes a Bowtie2 index and set of sequencing read files and outputs set of alignments in SAM format. An example of how to run Bowtie2 local alignment with paired-end fastq files and 10 CPUs is shown below
+The command bowtie2 takes a Bowtie2 index and set of sequencing read files and outputs set of alignments in SAM format. The script below is still a work in progress - I haven't yet figured out how to parallelize this process in the most efficient way. 
 
 ```
 #!/bin/bash
-#SBATCH --job-name=elp_bowtie2
+#SBATCH --job-name=elp_bowtie2WA
 #SBATCH --account=merlab
 #SBATCH --partition=compute-hugemem
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=20
 ## Walltime (days-hours:minutes:seconds format)
-#SBATCH --time=2-12:00:00
+#SBATCH --time=3-12:00:00
 ## Memory per node
-#SBATCH --mem=80G
+#SBATCH --mem=100G
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=elpetrou@uw.edu
 
 ##### ENVIRONMENT SETUP ##########
-DATADIR=/mmfs1/gscratch/scrubbed/elpetrou/test
-GENOMEDIR=/gscratch/merlab/genomes/atlantic_herring #location of genome
+DATADIR=/mmfs1/gscratch/scrubbed/elpetrou/fastq_trimmed/WA #directory containing the trimmed fastq files
+GENOMEDIR=/gscratch/merlab/genomes/atlantic_herring #directory containing the genome
 GENOME_PREFIX=GCF_900700415.1_Ch_v2.0.2 #prefix of .bt2 files made by bowtie2
 SUFFIX1=_R1_001.trim.fastq # Suffix to trimmed fastq files. The forward reads with paired-end data.
 SUFFIX2=_R2_001.trim.fastq # Suffix to trimmed fastq files. The reverse reads with paired-end data.
-SAMPLELIST=bowtie2_list.txt # text file storing sample names (for looping thru samples)
-OUTDIR=/mmfs1/gscratch/scrubbed/elpetrou/bam #where to store output files
+OUTDIR=/mmfs1/gscratch/scrubbed/elpetrou/sam #where to store output (sam) files
 
 
-##############################################################################
-## Save the sample names of the forward reads into a text file (for looping thru samples later)
-mkdir $OUTDIR
-
+############################################################################
 cd $DATADIR
-ls *$SUFFIX1 > $SAMPLELIST # save all fastq files with forward reads to a text file
 
-for infile in `cat $SAMPLELIST`
-do
-	base=`basename --suffix=$SUFFIX1 $infile`
-	bowtie2 -x $GENOMEDIR'/'$GENOME_PREFIX \
-	--phred33 -q \
-	-1 ${base}$SUFFIX1 \
-	-2 ${base}$SUFFIX2 \
-	-S ${base}.sam \
-	--very-sensitive \
-	--minins 0 --maxins 1500 --fr \
-	--threads 20 \
-	--rg-id ${base} --rg SM:${base} --rg LB:${base} --rg PU:Lane1 --rg PL:ILLUMINA
-done
+## I am trying to use xargs to parallelize this task. Some notes:
+## find - search for files in a directory hierarchy
+##  xargs - build and execute command lines from standard input
+## basename --suffix=SUFFIX: remove a trailing SUFFIX
+## xargs -I: Replaces occurrences of replace-str in the initial-arguments with names read from standard input
+
+
+find *$SUFFIX1 | xargs basename --suffix=$SUFFIX1 | xargs -I{} bowtie2 \
+-x $GENOMEDIR'/'$GENOME_PREFIX \
+--phred33 -q \
+-1 {}$SUFFIX1 \
+-2 {}$SUFFIX2 \
+-S {}.sam \
+--very-sensitive \
+--minins 0 --maxins 1500 --fr \
+--threads 30 \
+--rg-id {} --rg SM:{} --rg LB:{} --rg PU:Lane1 --rg PL:ILLUMINA
+
 
 
 #############################################################################
