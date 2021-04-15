@@ -52,6 +52,8 @@ Here is a summary plot of the trimmomatic log files, made with multiQC:
 
 ![surviving reads plot](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Markdown/plots/plot_trimmomatic.png)
 
-Here is a plot of adapter content for a single sample, after it had been trimmed with trimmomatic
+Below is a plot of adapter content for a single sample after it had been trimmed with trimmomatic. It looks just like the post-trimming plots we saw in the physalia course, so I believe that trimming was successful!
+
+![trimmed fastq](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Markdown/plots/adapter_content_PORT14_013_R1.fastq_trimmed.png)
 
 
