@@ -41,9 +41,14 @@ To check the quality of the raw sequence data I ran the software FastQC [using t
 
 I visualized the voluminous FastQC output using MultiQC software on Klone [using this script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Scripts/multiqc.sh)
 
-The sequencing quality looks really good for almost all samples, hurray!
+### Results 
+Download the full [MultiQC html report here](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Markdown/multiqc_report.html)
+
+The sequencing quality looks really great for almost all samples, hurray!
 
 ![phred_plot](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Markdown/plots/plot_fastqc_mean_qual_scores_raw.png)
 
-Download the full [MultiQC html report here](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Markdown/multiqc_report.html)
+Here you can see the adapter content in one sample (CHPT16_041_R1):
+
+![adapter content untrimmed fastq](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Markdown/plots/adapter_content_CHPT16_041_R1.fastq.png)
 
