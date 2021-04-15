@@ -27,18 +27,18 @@ PE [-version] [-threads <threads>] [-phred33|-phred64] [-trimlog <trimLogFile>] 
 
 
 #### Syntax:
-See user manual for explanation of terms
+See [user manual](http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf) for explanation of terms
 ```
 ILLUMINACLIP:<fastaWithAdaptersEtc>:<seed mismatches>:<palindrome clip threshold>:<simple clip threshold>:<minAdapterLength>:<keepBothReads>
 ```
 
 ### File with Nextera adapters, as specified in Physalia course and Illumina Adapter Sequences document:
 
-I made a [fasta file containing Illumina Nextera adapter sequences](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/6156aca1bec94cb8261570e0636fa7d9a3c236f5/Scripts/NexteraPE_EP.fa). These are the sequences that I will trim away from my raw sequencing data using Trimmomatic. 
+I made a [fasta file containing Illumina Nextera adapter sequences](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Scripts/NexteraPE_EP.fa). These are the sequences that I will trim away from my raw sequencing data using Trimmomatic. 
 
 ### Script to run Trimmomatic over a directory of fastq files on Klone
  
-Next, I wrote a [sbatch script to run trimmomatic on Klone](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/4f5ca5f8b5585f7ed5a01cf4e0459be749d0ae75/Scripts/trimmomatic_sbatch.sh)
+Next, I wrote a [sbatch script to run trimmomatic on Klone](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Scripts/trimmomatic_sbatch.sh)
 
 This script removes Illumina adapters, trims sequences if their phred score drops below 20 (SLIDINGWINDOW:4:20), and removes sequences that are shorter than 40 bp (MINLEN:40). 
 
@@ -48,8 +48,10 @@ Result from a typical sample:
 
 ``` Input Read Pairs: 6825779 Both Surviving: 5932557 (86.91%) Forward Only Surviving: 468865 (6.87%) Reverse Only Surviving: 215887 (3.16%) Dropped: 208470 (3.05%) ```
 
-Summary of results using multiQC
+Here is a summary plot of the trimmomatic log files, made with multiQC:
 
+![surviving reads plot](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Markdown/plots/plot_trimmomatic.png)
 
+Here is a plot of adapter content for a single sample, after it had been trimmed with trimmomatic
 
 
