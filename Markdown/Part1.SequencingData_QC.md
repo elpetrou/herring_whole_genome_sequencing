@@ -31,19 +31,19 @@ Here is a summary of the raw sequencing data :
 
 ## Unzip data
 
-I unzipped the data on Klone [using this script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/102c8f2fcdacae63b32a074be61be1d13fdb52a1/Scripts/gunzip.sh)
+I unzipped the data on Klone [using this script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Scripts/gunzip.sh)
 
 ## Run FastQC
 
-To check the quality of the raw sequence data I ran the software FastQC [using this script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/102c8f2fcdacae63b32a074be61be1d13fdb52a1/Scripts/fastqc.sh) on Klone
+To check the quality of the raw sequence data I ran the software FastQC [using this script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Scripts/fastqc.sh) on Klone
 
 ## Visualize FastQC output using MultiQC
 
-I visualized the voluminous FastQC output using MultiQC software on Klone [using this script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/102c8f2fcdacae63b32a074be61be1d13fdb52a1/Scripts/multiqc.sh)
+I visualized the voluminous FastQC output using MultiQC software on Klone [using this script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Scripts/multiqc.sh)
 
 The sequencing quality looks really good for almost all samples, hurray!
 
-![phred_plot](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/ccac1016f236ec8ed4d1ef8202c39d3390e1e20c/Markdown/plot_fastqc_mean_qual_scores_raw.png)
+![phred_plot](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Markdown/plots/plot_fastqc_mean_qual_scores_raw.png)
 
-Download the full [MultiQC html report here](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/ccac1016f236ec8ed4d1ef8202c39d3390e1e20c/Markdown/multiqc_report.html)
+Download the full [MultiQC html report here](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Markdown/multiqc_report.html)
 
