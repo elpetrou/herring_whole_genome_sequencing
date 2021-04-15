@@ -42,9 +42,13 @@ Next, I wrote a [sbatch script to run trimmomatic on Klone](https://github.com/E
 
 This script removes Illumina adapters, trims sequences if their phred score drops below 20 (SLIDINGWINDOW:4:20), and removes sequences that are shorter than 40 bp (MINLEN:40). 
 
-I tested and debugged this script on 20210407, and it ran -  hooray! Here is what was printed to the terminal:
+### Let's look at the trimmomatic output:
+
+Result from a typical sample:
 
 ``` Input Read Pairs: 6825779 Both Surviving: 5932557 (86.91%) Forward Only Surviving: 468865 (6.87%) Reverse Only Surviving: 215887 (3.16%) Dropped: 208470 (3.05%) ```
+
+Summary of results using multiQC
 
 
 
