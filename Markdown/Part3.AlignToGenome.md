@@ -55,24 +55,25 @@ The command bowtie2 takes a Bowtie2 index and set of sequencing read files and o
 
 ```
 #!/bin/bash
-#SBATCH --job-name=elp_bowtie2WA
+#SBATCH --job-name=elp_bowtie2AK
 #SBATCH --account=merlab
 #SBATCH --partition=compute-hugemem
 #SBATCH --nodes=1
+#SBATCH --cpus-per-task=18
 ## Walltime (days-hours:minutes:seconds format)
-#SBATCH --time=3-12:00:00
+#SBATCH --time=6-4:00:00
 ## Memory per node
-#SBATCH --mem=100G
+#SBATCH --mem=80G
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=elpetrou@uw.edu
 
 ##### ENVIRONMENT SETUP ##########
-DATADIR=/mmfs1/gscratch/scrubbed/elpetrou/fastq_trimmed/WA #directory containing the trimmed fastq files
+DATADIR=/mmfs1/gscratch/scrubbed/elpetrou/fastq_trimmed/WA/QLBY #directory containing the trimmed fastq files
 GENOMEDIR=/gscratch/merlab/genomes/atlantic_herring #directory containing the genome
 GENOME_PREFIX=GCF_900700415.1_Ch_v2.0.2 #prefix of .bt2 files made by bowtie2
 SUFFIX1=_R1_001.trim.fastq # Suffix to trimmed fastq files. The forward reads with paired-end data.
 SUFFIX2=_R2_001.trim.fastq # Suffix to trimmed fastq files. The reverse reads with paired-end data.
-OUTDIR=/mmfs1/gscratch/scrubbed/elpetrou/sam #where to store output (sam) files
+OUTDIR=/mmfs1/gscratch/scrubbed/elpetrou/bam #where to store output (sam) files
 
 
 ############################################################################
@@ -93,7 +94,7 @@ find *$SUFFIX1 | xargs basename --suffix=$SUFFIX1 | xargs -I{} bowtie2 \
 -S {}.sam \
 --very-sensitive \
 --minins 0 --maxins 1500 --fr \
---threads 30 \
+--threads 16 \
 --rg-id {} --rg SM:{} --rg LB:{} --rg PU:Lane1 --rg PL:ILLUMINA
 
 
@@ -102,6 +103,7 @@ find *$SUFFIX1 | xargs basename --suffix=$SUFFIX1 | xargs -I{} bowtie2 \
 ## Move the results files to the output directory
 
 mv *sam $OUTDIR
+
     
 ```
 
