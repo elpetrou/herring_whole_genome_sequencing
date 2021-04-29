@@ -86,7 +86,9 @@ bowtie2 -x $GENOMEDIR'/'$GENOME_PREFIX \
 
 ```
 
-I did some tests and found that it took ~30 min to align a single sample to the genome, using 20 or 32 threads. Additionally, memory is not an issue for bowtie2 because it has a small memory footprint (3-4 Gb). Given that our node on Klone has 40 cores, I realized that I should stack "2 jobs" with 20 cores each and run them in parallel. To do this, I divided the fastq files into two folders and used a separate sbatch script to submit the job for each folder. It's not the most elegant solution in the world but it reduced overall analysis time to 15 min per sample. Here is the sbatch script to do this:
+I did some tests and found that it took ~30 min to align a single sample to the genome, using 20 or 32 threads. Additionally, memory is not an issue for bowtie2 because it has a small memory footprint (3-4 Gb). Given that our node on Klone has 40 cores, I realized that I should stack "2 jobs" with 20 cores each and run them in parallel. To do this, I divided the fastq files into two folders and used a separate sbatch script to submit the job for each folder, like this : ` sbatch slurm_parallel_bowtie2.sh`. It's not the most elegant solution in the world but it reduced overall analysis time to 15 min per sample. 
+
+Here is the sbatch script to do this:
 
 ```
 #!/bin/bash
@@ -125,4 +127,76 @@ done
 
 ```
 
-On average, it looks like ~86% of sequences are aligning to the Atlantic herring genome and 55% are aligning uniquely. I hope this translates into some nice data downstream!!
+On average, it looks like ~86% of sequences are aligning to the Atlantic herring genome and 55% are aligning uniquely. I hope this translates into some nice data downstream!
+
+## Use Samtools to convert sam to bam, format filter for quality & alignment, and sort bame files
+
+I first had to install samtools on Klone, and that was a pain because I was having trouble with the version of openssl that samtools uses. To get around this issue, I decided to create a special conda environment for samtools. This how I did it:
+
+```
+# Install samtools using a conda environment (to get around the open ssl bug):
+#The syntax for the first command says “conda” runs conda, “create -n” creates a new environment
+conda create -n samtools_env
+
+# To activate or enter the environments you just created simply type:
+conda activate samtools_env
+
+# Once in the environment, install the versions of htslib samtools and openssl that you want:
+conda install -c bioconda htslib samtools openssl=1.0
+
+```
+Once samtools was installed and functionining properly, I had to figure out how to call it from within an sbatch script. It turns out you use the command `source activate` rather than `conda activate` (that will cause your script to fail. So arcane, this knowledge!
+
+Finally, I was able to run samtools, using this script (samtools_sbatch.sh):
+
+
+```
+#!/bin/bash
+#SBATCH --job-name=elp_samtools
+#SBATCH --account=merlab
+#SBATCH --partition=compute-hugemem
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=20
+## Walltime (days-hours:minutes:seconds format)
+#SBATCH --time=4-12:00:00
+## Memory per node
+#SBATCH --mem=100G
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=elpetrou@uw.edu
+
+
+##### ENVIRONMENT SETUP ##########
+# Specify the directory containing data
+DATADIR=/mmfs1/gscratch/scrubbed/elpetrou/bam #directory with sam files
+SUFFIX1=.sam #file suffix
+MYCONDA=samtools_env #name of the conda environment that has samtools
+
+# activate the conda environment that runs samtools
+source activate $MYCONDA
+
+
+###################################################################################################################
+#Move into the working directory and run script
+cd $DATADIR
+
+# Run samtools commands. This takes about 5 min per sample (so like 2 days total for whole data set?)
+for MYSAMPLEFILE in *$SUFFIX1
+do
+    echo $MYSAMPLEFILE
+    MYBASE=`basename --suffix=$SUFFIX1 $MYSAMPLEFILE`
+    echo $MYBASE
+    samtools view -b -h -q 20 -F 4 $MYSAMPLEFILE | \
+    samtools sort - | \
+    samtools index - $MYBASE'_sorted.bam'
+done
+
+# Flag explanations for samtools view:
+# -b       output BAM
+# -h       include header in SAM output
+# -q INT   only include reads with mapping quality >= INT [0]
+#-F INT   only include reads with none of the bits set in INT set in FLAG [0] (aka when this is set to 4, you remove unmapped reads)
+
+
+
+```
+
