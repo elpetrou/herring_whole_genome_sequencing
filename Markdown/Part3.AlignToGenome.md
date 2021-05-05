@@ -15,7 +15,7 @@ I downloaded all files (fasta = GCF_900700415.1_Ch_v2.0.2_genomic.fna, gff = GCF
  
 ## Install bowtie2 on Klone
 
-I installed bowtie2 on the MerLab node by logging into a Klone terminal and typing these commands:
+I installed bowtie2 v2.4.2 on the MerLab node by logging into a Klone terminal and typing these commands:
 
 ```
 cd /gscratch/merlab/software/miniconda3/bin
@@ -131,7 +131,7 @@ On average, it looks like ~86% of sequences are aligning to the Atlantic herring
 
 ## Use Samtools to convert sam to bam, format filter for quality & alignment, and sort bame files
 
-I first had to install samtools on Klone, and that was a pain because I was having trouble with the version of openssl that samtools uses. To get around this issue, I decided to create a special conda environment for samtools. This how I did it:
+I first had to install samtools on Klone, and that was a pain because I was having trouble with the version of openssl that samtools uses. To get around this issue, I decided to create a special conda environment for samtools v1.12. This how I did it:
 
 ```
 # Install samtools using a conda environment (to get around the open ssl bug):
@@ -145,9 +145,7 @@ conda activate samtools_env
 conda install -c bioconda htslib samtools openssl=1.0
 
 ```
-Once samtools was installed and functionining properly, I had to figure out how to call it from within an sbatch script. It turns out you use the command `source activate` rather than `conda activate` (that will cause your script to fail. So arcane, this knowledge!
-
-Finally, I was able to run samtools, using this script (samtools_sbatch.sh):
+I was able to run samtools, using this script (samtools_sbatch.sh):
 
 
 ```
@@ -169,10 +167,18 @@ Finally, I was able to run samtools, using this script (samtools_sbatch.sh):
 ## Specify the directory containing data
 DATADIR=/mmfs1/gscratch/scrubbed/elpetrou/bam #directory with sam files
 SUFFIX1=.sam #file suffix
-MYCONDA=samtools_env #name of the conda environment that has samtools
+MYCONDA=/gscratch/merlab/software/miniconda3/etc/profile.d/conda.sh # path to conda installation on our Klone node. Do NOT change this.
+MYENV=samtools_env #name of the conda environment containing samtools software. 
 
-## activate the conda environment that runs samtools
-source activate $MYCONDA
+## Activate the conda environment:
+## start with clean slate
+module purge
+
+## This is the filepath to our conda installation on Klone. Source command will allow us to execute commands from a file in the current shell
+source $MYCONDA
+
+## activate the conda environment
+conda activate $MYENV
 
 
 ###################################################################################################################
@@ -195,6 +201,73 @@ done
 ## -q INT   only include reads with mapping quality >= INT [0]
 ##-F INT   only include reads with none of the bits set in INT set in FLAG [0] (aka when this is set to 4, you remove unmapped reads)
 
+## deactivate the conda environment
+conda deactivate
 
 ```
+## Use picard to remove PCR duplicates; use bamUtil to clip overlapping read pairs
+
+In this step, I removed the PCR duplicates and trimmed the overlapping part of each read pair in pair-end data.
+
+Install the software on Klone:(picard v2.18.7 and bamUtil v1.0.15)
+
+``` 
+conda create -n picard_env
+conda activate picard_env
+conda install -c bioconda picard bamutil
+```
+
+Run an sbatch script to conduct the analysis:
+
+``` bash
+#!/bin/bash
+#SBATCH --job-name=elp_dedup_clip
+#SBATCH --account=merlab
+#SBATCH --partition=compute-hugemem
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=20
+## Walltime (days-hours:minutes:seconds format)
+#SBATCH --time=3-12:00:00
+## Memory per node
+#SBATCH --mem=100G
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=elpetrou@uw.edu
+
+##### ENVIRONMENT SETUP ####################################################
+## Specify the directory containing data
+DATADIR=/mmfs1/gscratch/scrubbed/elpetrou/bam #directory containing bam files
+SUFFIX1=_minq20_sorted.bam # suffix to sorted and quality-filtered bam files produced in previous step of pipeline.
+MYCONDA=/gscratch/merlab/software/miniconda3/etc/profile.d/conda.sh # path to conda installation on our Klone node. Do NOT change this.
+MYENV=picard_env #name of the conda environment containing picard software. 
+
+## Activate the conda environment:
+## start with clean slate
+module purge
+
+## This is the filepath to our conda installation on Klone. Source command will allow us to execute commands from a file in the current shell
+source $MYCONDA
+
+## activate the conda environment
+conda activate $MYENV
+
+###### CODE FOR ANALYSIS ####################################################
+## Move into the working directory
+cd $DATADIR
+
+## Run picard and bamutils (remove pcr duplicates and clip overlapping reads). These analyses take ~4 min to run per sample. Please note that picard can't handle newline breaks in the code (\) - so that is why all the commands are hideously written on one line.
+
+for MYSAMPLEFILE in *$SUFFIX1
+do
+    echo $MYSAMPLEFILE
+    MYBASE=`basename --suffix=$SUFFIX1 $MYSAMPLEFILE`
+    echo $MYBASE
+    picard MarkDuplicates INPUT=$MYBASE'_minq20_sorted.bam' OUTPUT=$MYBASE'_minq20_sorted_dedup.bam' METRICS_FILE=$MYBASE'_minq20_sorted_dupstat.txt' VALIDATION_STRINGENCY=SILENT REMOVE_DUPLICATES=true
+    bam clipOverlap --in $MYBASE'_minq20_sorted_dedup.bam' --out $MYBASE'_minq20_sorted_dedup_overlapclipped.bam' --stats
+done 
+
+## Leave the picard conda environment
+conda deactivate
+
+```
+
 
