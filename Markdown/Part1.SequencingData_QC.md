@@ -37,9 +37,73 @@ I unzipped the data on Klone [using this script](https://github.com/EleniLPetrou
 
 To check the quality of the raw sequence data I ran the software FastQC [using this script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Scripts/fastqc.sh) on Klone
 
+```
+#!/bin/bash
+#SBATCH --job-name=elpetrou_fastqc
+#SBATCH --account=merlab
+#SBATCH --partition=compute-hugemem
+#SBATCH --nodes=1
+## Walltime (days-hours:minutes:seconds format)
+#SBATCH --time=24:00:00
+## Memory per node
+#SBATCH --mem=100G
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=elpetrou@uw.edu
+
+##### ENVIRONMENT SETUP ##########
+DATADIR=/mmfs1/gscratch/scrubbed/elpetrou/fastq
+OUTDIR=/mmfs1/gscratch/scrubbed/elpetrou/fastqc
+MYSUFFIX=.fastq
+
+#### CODE FOR JOB #####
+## make output directory
+mkdir $OUTDIR
+
+## navigate into directory holding fastq files
+cd $DATADIR 
+
+# Run fastqc on all files that end in a particular suffix ( in this case, .fastq)
+for SAMPLEFILE in *$MYSUFFIX
+do
+	fastqc -f fastq --extract \
+	$SAMPLEFILE
+done
+
+## Move all the fastqc results files (ending in _fastqc, .zip, .html) to the output directory
+mv *.html $OUTDIR
+mv *.zip $OUTDIR
+mv *_fastqc $OUTDIR
+
+```
+
 ## Visualize FastQC output using MultiQC
 
 I visualized the voluminous FastQC output using MultiQC software on Klone [using this script](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Scripts/multiqc.sh)
+
+```
+srun -p compute-hugemem -A merlab --nodes=1 \
+--ntasks-per-node=1 --time=02:00:00 \
+--mem=100G --pty /bin/bash
+
+
+# Specify the path and the name of the singularity you want to use
+DATADIR=/mmfs1/gscratch/scrubbed/elpetrou/fastqc
+
+cd $DATADIR
+
+
+# Load the singularity module
+module load singularity
+MYSINGULARITY=/mmfs1/gscratch/merlab/singularity_sif/containerised_ATACseq_pipeline_multiqc.sif
+
+# Use the singularity exec command to use the singularity and run commands that are specific to the software it contains (VCFtools, in this case)
+
+singularity exec \
+$MYSINGULARITY \
+multiqc .
+
+
+```
 
 ### Results 
 Download the full [MultiQC html report here](https://github.com/EleniLPetrou/herring_whole_genome_sequencing/blob/main/Markdown/multiqc_report.html)
