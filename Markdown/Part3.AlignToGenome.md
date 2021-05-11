@@ -401,7 +401,7 @@ singularity exec $MYSINGULARITY java -jar $GATK3 \
 -I $MOUNTDIR'/'$BAMLIST \
 -targetIntervals $MOUNTDIR'/'all_samples_for_indel_realigner.intervals \
 --consensusDeterminationModel USE_READS \
---nWayOut _realigned.bam
+--nWayOut $MOUNTDIR'/'_realigned.bam
 
 
 
